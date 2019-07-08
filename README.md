@@ -5,3 +5,5 @@
 2. interface traffic monitoring with OpenConfig
 
 3. collecting LSP statis with native sensor JTI
+
+4. collecting delay using OpenConfig and RPM
