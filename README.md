@@ -4,11 +4,12 @@
 
 [2. vpn interface monitoring](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/vpn-monitoring)
 
-3. interface traffic monitoring with OpenConfig
+[3. collecting delay using OpenConfig and RPM](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/collecting-delay-using-openconfig)
 
-4. collecting LSP statis with native sensor JTI
+4. interface traffic monitoring with OpenConfig
 
-5. collecting delay using OpenConfig and RPM
+5. collecting LSP statis with native sensor JTI
+
 
 
 
