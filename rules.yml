@@ -103,8 +103,7 @@ topic:
       description: VRF name
       field-name: vpn-name
       type: string
-    network-rule:
-    - 
+    network-rule: []
     rule-frequency: 30s
     rule-name: check-vpn-interface-op-state
     trigger:
