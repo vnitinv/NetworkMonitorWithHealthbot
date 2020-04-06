@@ -18,24 +18,3 @@
     }
   ]
 }
-
-{
-  "playbook": [
-    {
-      "description": "to monitor vpn interface status",
-      "playbook-name": "vpn-interface",
-      "rules": [
-        "protocol.vpn/check-vpn-interface-op-state"
-      ],
-      "synopsis": "synopsis"
-    },
-    {
-      "description": "to collect interface status for all interfaces",
-      "playbook-name": "vpn-interface",
-      "rules": [
-        "protocol.vpn/check-vpn-interface-op-state"
-      ],
-      "synopsis": "synopsis"
-    }
-  ]
-}
