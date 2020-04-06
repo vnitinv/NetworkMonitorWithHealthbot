@@ -180,7 +180,6 @@
             }
           ],
           "network-rule": [
-            null
           ],
           "rule-frequency": "30s",
           "rule-name": "check-vpn-interface-op-state",
