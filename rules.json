@@ -1,0 +1,251 @@
+{
+  "topic": [
+    {
+      "topic-name": "interfaces",
+      "synopsis": "for interfaces",
+      "description": "This topic is for interfaces",
+      "rule": [
+        {
+          "field": [
+            {
+              "field-name": "interface-name",
+              "sensor": [
+                {
+                  "path": "/interfaces/interface/@name",
+                  "sensor-name": "interfaces",
+                  "where": [
+                    {
+                      "query": "/interfaces/interface/@name =~ /{{ifd-name}}/"
+                    }
+                  ]
+                }
+              ],
+              "type": "string"
+            },
+            {
+              "field-name": "interface-state",
+              "description": "interface oper status",
+              "sensor": [
+                {
+                  "path": "/interfaces/interface/subinterfaces/subinterface/state/oper-status",
+                  "sensor-name": "interfaces"
+                }
+              ],
+              "type": "string"
+            },
+            {
+              "field-name": "sub-interface-index",
+              "description": "sub interface number",
+              "sensor": [
+                {
+                  "path": "/interfaces/interface/subinterfaces/subinterface/@index",
+                  "where": [
+                    {
+                      "query": "/interfaces/interface/subinterfaces/subinterface/@index =~ /{{ifl-no}}/"
+                    }
+                  ],
+                  "sensor-name": "interfaces"
+                }
+              ],
+              "type": "string"
+            }
+          ],
+          "keys": [
+            "interface-name",
+            "sub-interface-index"
+          ],
+          "rule-name": "get-op-status",
+          "sensor": [
+            {
+              "sensor-name": "interfaces",
+              "description": "Interfaces open-config sensor to collect telemetry data from network device",
+              "open-config": {
+                "frequency": "15s",
+                "sensor-name": "/interfaces"
+              }
+            }
+          ],
+          "trigger": [
+            {
+              "frequency": "30s",
+              "term": [
+                {
+                  "term-name": "Term_1",
+                  "then": {
+                    "status": {
+                      "color": "red",
+                      "message": "$interface-name.$sub-interface-index operational state DOWN"
+                    }
+                  },
+                  "when": {
+                    "matches-with": [
+                      {
+                        "left-operand": "$interface-state",
+                        "right-operand": "DOWN"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "trigger-name": "interface_down"
+            },
+            {
+              "frequency": "30s",
+              "term": [
+                {
+                  "term-name": "Term_1",
+                  "then": {
+                    "status": {
+                      "color": "green",
+                      "message": "$interface-name.$sub-interface-index operational state UP"
+                    }
+                  },
+                  "when": {
+                    "matches-with": [
+                      {
+                        "left-operand": "$interface-state",
+                        "right-operand": "UP"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "trigger-name": "interface_up"
+            }
+          ],
+          "variable": [
+            {
+              "description": "Interfaces to be monitored, regular expression, eg 'ge-.*'",
+              "name": "ifd-name",
+              "type": "string",
+              "value": "ge.*"
+            },
+            {
+              "description": "Sub interfaces index to be monitored, regular expression, eg '0-10'",
+              "name": "ifl-no",
+              "type": "string",
+              "value": "ge.*"
+            }       
+          ]
+        }
+      ]
+    },
+    {
+      "topic-name": "protocol.vpn",
+      "synopsis": "for vpn monitoring",
+      "description": "This topic is for vpn monitoring",
+      "rule": [
+        {
+          "description": "monitor the PE interface status",
+          "field": [
+            {
+              "constant": {
+                "value": "{{pe-ifl-number}}"
+              },
+              "description": "Routing instance sub interface number",
+              "field-name": "instance-ifl-no",
+              "type": "integer"
+            },
+            {
+              "constant": {
+                "value": "{{pe-interface-name}}"
+              },
+              "description": "Routing instance physical interface name",
+              "field-name": "instance-interface-name",
+              "type": "string"
+            },
+            {
+              "description": "Routing instance interface status",
+              "field-name": "instance-interface-status",
+              "reference": {
+                "path": "/device-group[device-group-name={{pe-device-group}}]/device[device-id={{pe-device-name}}]/topic[topic-name='interfaces']/rule[rule-name=get-op-status]/field[sub-interface-index='{{pe-ifl-number}}' and interface-name='{{pe-interface-name}}']/link-state"
+              },
+              "type": "string"
+            },
+            {
+              "constant": {
+                "value": "{{pe-device-name}}"
+              },
+              "description": "PE router name to monitor",
+              "field-name": "pe-router-name",
+              "type": "string"
+            },
+            {
+              "constant": {
+                "value": "{{customer-vpn-name}}"
+              },
+              "description": "VRF name",
+              "field-name": "vpn-name",
+              "type": "string"
+            }
+          ],
+          "network-rule": [
+            null
+          ],
+          "rule-frequency": "30s",
+          "rule-name": "check-vpn-interface-op-state",
+          "trigger": [
+            {
+              "frequency": "30s",
+              "term": [
+                {
+                  "term-name": "is-pe-interface-up",
+                  "then": {
+                    "status": {
+                      "color": "green",
+                      "message": "PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name on $pe-router-name is UP"
+                    }
+                  },
+                  "when": {
+                    "matches-with": [
+                      {
+                        "left-operand": "$instance-interface-status",
+                        "right-operand": "UP"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term-name": "is-pe-interface-down",
+                  "then": {
+                    "status": {
+                      "color": "red",
+                      "message": "PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name on $pe-router-name is $instance-interface-status"
+                    }
+                  }
+                }
+              ],
+              "trigger-name": "l3vpn-pe-interface-state"
+            }
+          ],
+          "variable": [
+            {
+              "name": "customer-vpn-name",
+              "type": "string"
+            },
+            {
+              "description": "Router group to monitor, regular expression, e.g. 'edge.*'",
+              "name": "pe-device-group",
+              "type": "device-group"
+            },
+            {
+              "description": "Router name to monitor, regular expression, e.g. 'edge-router.*'",
+              "name": "pe-device-name",
+              "type": "device"
+            },
+            {
+              "description": "PE IFL to monitor, regular expression, e.g. '1-10'",
+              "name": "pe-ifl-number",
+              "type": "int"
+            },
+            {
+              "description": "PE interface to monitor, regular expression, e.g. 'ge-.*'",
+              "name": "pe-interface-name",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
