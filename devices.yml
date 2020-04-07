@@ -1,0 +1,56 @@
+---
+device:
+- authentication:
+    password:
+      password: "****"
+      username: "****"
+  device-id: vmx102
+  host: 10.102.162.134
+  iAgent:
+    port: 830
+  open-config:
+    port: 32767
+  snmp:
+    port: 161
+    v2:
+      community: public
+  system-id: vmx102:10.102.162.134
+  vendor:
+    juniper:
+      operating-system: junos
+- authentication:
+    password:
+      password: "****"
+      username: "****"
+  device-id: vmx104
+  host: 10.102.161.69
+  iAgent:
+    port: 830
+  open-config:
+    port: 32767
+  snmp:
+    port: 161
+    v2:
+      community: public
+  system-id: vmx104:10.102.161.69
+  vendor:
+    juniper:
+      operating-system: junos
+- authentication:
+    password:
+      password: "****"
+      username: "****"
+  device-id: vmx101
+  host: 10.102.162.149
+  iAgent:
+    port: 830
+  open-config:
+    port: 32767
+  snmp:
+    port: 161
+    v2:
+      community: public
+  system-id: vmx101:10.102.162.149
+  vendor:
+    juniper:
+      operating-system: junos
