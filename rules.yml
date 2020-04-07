@@ -125,7 +125,7 @@ topic:
             color: red
             message: PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name
               on $pe-router-name is $instance-interface-status
-      trigger-name: l3vpn-pe-interface-state
+      trigger-name: vpn-pe-interface-state
     variable:
     - name: customer-vpn-name
       type: string
