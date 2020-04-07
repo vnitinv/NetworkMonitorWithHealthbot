@@ -131,6 +131,92 @@
       ]
     },
     {
+      "topic-name": "latency",
+      "synopsis": "for link latency",
+      "description": "This topic is for link latency",
+      "rule": [
+        {
+          "field": [
+            {
+              "field-name": "probe_delay_telemetry",
+              "sensor": [
+                {
+                  "path": "/junos/rpm/probe-results/probe-test-results/probe-single-results/rtt",
+                  "sensor-name": "rpm-probe"
+                }
+              ],
+              "type": "integer"
+            },
+            {
+              "field-name": "src_addr_telemetry",
+              "sensor": [
+                {
+                  "path": "/junos/rpm/probe-results/probe-test-results/source-address",
+                  "sensor-name": "rpm-probe"
+                }
+              ],
+              "type": "string"
+            }
+          ],
+          "keys": [
+            "src_addr_telemetry"
+          ],
+          "rule-name": "probe_delay_telemetry",
+          "sensor": [
+            {
+              "open-config": {
+                "frequency": "5s",
+                "sensor-name": "/junos/rpm/probe-results/probe-test-results"
+              },
+              "sensor-name": "rpm-probe"
+            }
+          ],
+          "trigger": [
+            {
+              "frequency": "30s",
+              "term": [
+                {
+                  "term-name": "Term_1",
+                  "then": {
+                    "status": {
+                      "color": "green",
+                      "message": "$src_addr_telemetry delay is $probe_delay_telemetry is normal"
+                    }
+                  },
+                  "when": {
+                    "less-than": [
+                      {
+                        "left-operand": "$probe_delay_telemetry",
+                        "right-operand": "200000"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term-name": "Term_2",
+                  "then": {
+                    "status": {
+                      "color": "yellow",
+                      "message": "$src_addr_telemetry delay is $probe_delay_telemetry exceeds delay threshold 200000 us.  "
+                    }
+                  },
+                  "when": {
+                    "greater-than": [
+                      {
+                        "left-operand": "$probe_delay_telemetry",
+                        "right-operand": "200000"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "trigger-name": "trigger_1"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "topic-name": "protocol.vpn",
       "synopsis": "for vpn monitoring",
       "description": "This topic is for vpn monitoring",
@@ -214,7 +300,7 @@
                   }
                 }
               ],
-              "trigger-name": "l3vpn-pe-interface-state"
+              "trigger-name": "vpn-pe-interface-state"
             }
           ],
           "variable": [
