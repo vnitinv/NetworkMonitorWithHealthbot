@@ -1,0 +1,7 @@
+---
+notification:
+- kafka-publish:
+    bootstrap-servers:
+    - 192.168.99.100:32001
+    topic: hb-triggers
+  notification-name: Kafka-HB
