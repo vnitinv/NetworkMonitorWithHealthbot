@@ -1,0 +1,28 @@
+---
+device-group:
+- device-group-name: vpn-1
+  devices:
+  - vmx102
+  - vmx104
+  - vmx101
+  notification:
+    enable: []
+    major:
+    - kafka
+    minor:
+    - kafka
+    normal:
+    - kafka
+  playbooks:
+  - latency
+  - all-interface-status
+  variable:
+  - instance-id: latency
+    playbook: latency
+    rule: latency/probe_delay_telemetry
+  - instance-id: interface-op-status
+    playbook: all-interface-status
+    rule: interfaces/get-op-status
+    variable-value:
+    - name: ifd-name
+      value: ge-.*
