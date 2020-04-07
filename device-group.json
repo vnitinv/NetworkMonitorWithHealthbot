@@ -21,7 +21,6 @@
         ]
       },
       "playbooks": [
-        "vpn-bgp-peer",
         "latency",
         "all-interface-status"
       ],
@@ -30,13 +29,11 @@
           "instance-id": "latency",
           "playbook": "latency",
           "rule": "latency/probe_delay_telemetry",
-          "running-state": "running"
         },
         {
           "instance-id": "interface-op-status",
           "playbook": "all-interface-status",
           "rule": "interfaces/get-op-status",
-          "running-state": "running",
           "variable-value": [
             {
               "name": "ifd-name",
