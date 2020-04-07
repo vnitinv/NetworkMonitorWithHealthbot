@@ -1,0 +1,81 @@
+---
+network-group:
+- network-group-name: VPN-1
+  playbooks:
+  - vpn-bgp-state
+  - vpn-interface
+  variable:
+  - instance-id: vmx101-104
+    playbook: vpn-bgp-state
+    rule: bgp/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: northstar
+    - name: device1-name-variable
+      value: vmx101
+    - name: device1-peer-variable
+      value: 11.0.0.104
+  - instance-id: vmx101-102
+    playbook: vpn-bgp-state
+    rule: bgp/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: northstar
+    - name: device1-name-variable
+      value: vmx101
+    - name: device1-peer-variable
+      value: 11.0.0.102
+  - instance-id: vmx102-104
+    playbook: vpn-bgp-state
+    rule: bgp/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: northstar
+    - name: device1-name-variable
+      value: vmx102
+    - name: device1-peer-variable
+      value: 11.0.0.104
+  - instance-id: vmx101-108
+    playbook: vpn-bgp-state
+    rule: bgp/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: northstar
+    - name: device1-name-variable
+      value: vmx101
+    - name: device1-peer-variable
+      value: 11.0.0.108
+  - instance-id: vpn0-vmx101-ge001
+    playbook: vpn-interface
+    rule: protocol.vpn/check-vpn-interface-op-state
+    running-state: running
+    variable-value:
+    - name: customer-vpn-name
+      value: vpn_0
+    - name: pe-device-group
+      value: vpn-1
+    - name: pe-device-name
+      value: vmx101
+    - name: pe-ifl-number
+      value: '0'
+    - name: pe-interface-name
+      value: ge-0/0/1
+  - instance-id: vpn0-vmx102-ge001
+    playbook: vpn-interface
+    rule: protocol.vpn/check-vpn-interface-op-state
+    running-state: running
+    variable-value:
+    - name: customer-vpn-name
+      value: vpn_0
+    - name: pe-device-group
+      value: vpn-1
+    - name: pe-device-name
+      value: vmx102
+    - name: pe-ifl-number
+      value: '0'
+    - name: pe-interface-name
+      value: ge-0/0/1
