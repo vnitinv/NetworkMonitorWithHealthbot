@@ -131,6 +131,149 @@
       ]
     },
     {
+      "topic-name": "bgp",
+      "synopsis": "bgp",
+      "description": "This topic is to monitor bgp details",
+      "rule": [       
+        {
+          "field": [
+            {
+              "field-name": "established-transitions",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/established-transitions",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "integer"
+            },
+            {
+              "field-name": "last-established",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/last-established",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "integer"
+            },
+            {
+              "field-name": "local-as",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/local-as",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "integer"
+            },
+            {
+              "description": "neighbor-address",
+              "field-name": "neighbor-address",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address",
+                  "sensor-name": "bgp-sensor",
+                  "where": [
+                    {
+                      "query": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/@neighbor-address =~ /{{neighbors}}/"
+                    }
+                  ]
+                }
+              ],
+              "type": "string"
+            },
+            {
+              "field-name": "peer-as",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/peer-as",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "integer"
+            },
+            {
+              "field-name": "peer-type",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/peer-type",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "string"
+            },
+            {
+              "description": "session-state",
+              "field-name": "session-state",
+              "sensor": [
+                {
+                  "path": "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",
+                  "sensor-name": "bgp-sensor"
+                }
+              ],
+              "type": "string"
+            }
+          ],
+          "keys": [
+            "neighbor-address"
+          ],
+          "rule-name": "check-bgp-state-using-openconfig",
+          "sensor": [
+            {
+              "open-config": {
+                "frequency": "20s",
+                "sensor-name": "/network-instances/network-instance/protocols/protocol/bgp"
+              },
+              "sensor-name": "bgp-sensor"
+            }
+          ],
+          "trigger": [
+            {
+              "frequency": "30s",
+              "term": [
+                {
+                  "term-name": "is_established",
+                  "then": {
+                    "status": {
+                      "color": "green",
+                      "message": "session to $neighbor-address is $session-state - established-transitions $established-transitions - last-established $last-established"
+                    }
+                  },
+                  "when": {
+                    "matches-with": [
+                      {
+                        "left-operand": "$session-state",
+                        "right-operand": "ESTABLISHED"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "term-name": "is_not_established",
+                  "then": {
+                    "status": {
+                      "color": "red",
+                      "message": "session to $neighbor-address is $session-state - established-transitions $established-transitions last-established $last-established"
+                    }
+                  }
+                }
+              ],
+              "trigger-name": "neighbor-state"
+            }
+          ],
+          "variable": [
+            {
+              "description": "neighbors",
+              "name": "neighbors",
+              "type": "string",
+              "value": ".*"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "topic-name": "latency",
       "synopsis": "for link latency",
       "description": "This topic is for link latency",
