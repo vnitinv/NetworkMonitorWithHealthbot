@@ -3,6 +3,9 @@ import json
 import yaml
 import requests
 from requests.auth import HTTPBasicAuth
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 server_ip = "100.123.0.19:8080"
 base_url = "https://" + server_ip + "//api/v1/"
