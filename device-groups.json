@@ -11,13 +11,13 @@
         "enable": [
         ],
         "major": [
-          "kafka"
+          "Kafka-HB"
         ],
         "minor": [
-          "kafka"
+          "Kafka-HB"
         ],
         "normal": [
-          "kafka"
+          "Kafka-HB"
         ]
       },
       "playbooks": [
