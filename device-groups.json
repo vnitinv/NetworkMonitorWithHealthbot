@@ -22,13 +22,19 @@
       },
       "playbooks": [
         "latency",
+        "bgp-using-openconfig",
         "all-interface-status"
       ],
       "variable": [
         {
           "instance-id": "latency",
           "playbook": "latency",
-          "rule": "latency/probe_delay_telemetry",
+          "rule": "latency/probe_delay_telemetry"
+        },
+        {
+          "instance-id": "bgp-openconfig",
+          "playbook": "bgp-using-openconfig",
+          "rule": "bgp/check-bgp-state-using-openconfig"
         },
         {
           "instance-id": "interface-op-status",
