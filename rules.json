@@ -301,7 +301,9 @@
               }
             }
           ],
-          "network-rule": [null],
+          "network-rule": [
+            null
+          ],
           "rule-frequency": "20s",
           "rule-name": "check-session-state",
           "trigger": [
@@ -501,7 +503,9 @@
               "type": "string"
             }
           ],
-          "network-rule": [null],
+          "network-rule": [
+            null
+          ],
           "rule-frequency": "30s",
           "rule-name": "check-vpn-interface-op-state",
           "trigger": [
