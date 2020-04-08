@@ -10,11 +10,11 @@
     },
     {
       "description": "to collect interface status for all interfaces",
-      "playbook-name": "vpn-interface",
+      "playbook-name": "all-interface-status",
       "rules": [
-        "protocol.vpn/check-vpn-interface-op-state"
+        "interfaces/get-op-status"
       ],
-      "synopsis": "synopsis"
+      "synopsis": "all-interface-status synopsis"
     }
   ]
 }
