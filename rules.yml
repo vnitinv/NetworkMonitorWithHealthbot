@@ -149,6 +149,57 @@ topic:
       name: neighbors
       type: string
       value: ".*"
+  - field:
+    - constant:
+        value: "{{device1-group-variable}}"
+      field-name: device1-group
+      type: string
+    - constant:
+        value: "{{device1-name-variable}}"
+      field-name: device1-name
+      type: string
+    - constant:
+        value: "{{device1-peer-variable}}"
+      field-name: device1-peer
+      type: string
+    - field-name: device1-peer-session-state
+      reference:
+        path: "/device-group[device-group-name={{device1-group-variable}}]/device[device-id={{device1-name-variable}}]/topic[topic-name='bgp']/rule[rule-name=check-bgp-state-using-openconfig]/field[neighbor-address='{{device1-peer-variable}}']/session-state"
+    network-rule: []
+    rule-frequency: 20s
+    rule-name: check-session-state
+    trigger:
+    - frequency: 10s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: green
+            message: "$device1-name to $device1-peer BGP session UP $device1-peer-session-state"
+        when:
+          matches-with:
+          - left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      - term-name: Term_2
+        then:
+          status:
+            color: red
+            message: "$device1-name to $device1-peer BGP session DOWN $device1-peer-session-state"
+        when:
+          does-not-match-with:
+          - left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      trigger-name: session-state
+    variable:
+    - name: device1-group-variable
+      type: device-group
+      value: vmx
+    - name: device1-name-variable
+      type: device
+      value: vMX1
+    - description: ip address
+      name: device1-peer-variable
+      type: string
 - topic-name: latency
   synopsis: for link latency
   description: This topic is for link latency
