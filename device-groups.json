@@ -9,6 +9,7 @@
       ],
       "notification": {
         "enable": [
+          null
         ],
         "major": [
           "Kafka-HB"
