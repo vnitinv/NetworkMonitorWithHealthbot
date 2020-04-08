@@ -165,8 +165,8 @@ topic:
     - field-name: device1-peer-session-state
       reference:
         path: "/device-group[device-group-name={{device1-group-variable}}]/device[device-id={{device1-name-variable}}]/topic[topic-name='bgp']/rule[rule-name=check-bgp-state-using-openconfig]/field[neighbor-address='{{device1-peer-variable}}']/session-state"
-    network-rule: null
-    - 
+    network-rule:
+    - null
     rule-frequency: 20s
     rule-name: check-session-state
     trigger:
@@ -279,8 +279,8 @@ topic:
       description: VRF name
       field-name: vpn-name
       type: string
-    network-rule: null
-    - 
+    network-rule:
+    - null
     rule-frequency: 30s
     rule-name: check-vpn-interface-op-state
     trigger:
