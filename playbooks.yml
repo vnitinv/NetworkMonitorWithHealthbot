@@ -5,6 +5,9 @@ playbook:
   rules:
   - protocol.vpn/check-vpn-interface-op-state
   synopsis: synopsis
+- playbook-name: latency
+  rules:
+  - latency/probe_delay_telemetry
 - description: to collect interface status for all interfaces
   playbook-name: all-interface-status
   rules:
