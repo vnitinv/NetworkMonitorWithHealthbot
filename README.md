@@ -1,5 +1,5 @@
 # NetworkMonitorWithHealthbot
-[1. automate_healthbot_configuration](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
+[0. Automate Healthbot Configuration Using API](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Automate-Healthbot-Configuration-Using-API)
 
 [1. Y.1731 monitoring with iAgent](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
 
