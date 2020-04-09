@@ -1,0 +1,7 @@
+---
+- name: config hb
+  hosts:
+    - localhost
+  roles:
+    - config_healthbot
+  connection: local
