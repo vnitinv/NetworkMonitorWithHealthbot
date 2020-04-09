@@ -1,4 +1,5 @@
 # NetworkMonitorWithHealthbot
+[1. automate_healthbot_configuration](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
 
 [1. Y.1731 monitoring with iAgent](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
 
