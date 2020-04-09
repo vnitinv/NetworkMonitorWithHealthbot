@@ -1,0 +1,75 @@
+---
+- name: add devices to Healthbot
+  uri:
+    url: "{{ hb_base_url }}devices/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ devices_body }}"
+    validate_certs: no
+
+- name: add rules to Healthbot
+  uri:
+    url: "{{ hb_base_url }}topics/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ rules_body }}"
+    validate_certs: no
+
+- name: add playbooks to Healthbot
+  uri:
+    url: "{{ hb_base_url }}playbooks/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ playbooks_body }}"
+    validate_certs: no
+
+- name: add notifications to Healthbot
+  uri:
+    url: "{{ hb_base_url }}notifications/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ notifications_body }}"
+    validate_certs: no
+
+- name: add device-groups to Healthbot
+  uri:
+    url: "{{ hb_base_url }}device-groups/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ device_groups_body }}"
+    validate_certs: no
+
+- name: add network-groups to Healthbot
+  uri:
+    url: "{{ hb_base_url }}network-groups/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    body_format: json
+    body: "{{ network_groups_body }}"
+    validate_certs: no
+
+- name: commit Healthbot configuration
+  uri:
+    url: "{{ hb_base_url }}configuration/"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    method: POST
+    headers: {"Accept":"application/json", "Content-Type":"application/json"}
+    validate_certs: no
