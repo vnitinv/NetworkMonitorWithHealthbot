@@ -7,9 +7,12 @@
 
 [3. collecting delay using OpenConfig and RPM](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/collecting-delay-using-openconfig)
 
-4. interface traffic monitoring with OpenConfig
+[4. Syslog as Ingest](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/syslog-as-ingest)
 
-5. collecting LSP statis with native sensor JTI
+
+ interface traffic monitoring with OpenConfig
+
+ collecting LSP statis with native sensor JTI
 
 
 
