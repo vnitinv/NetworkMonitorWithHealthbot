@@ -3,7 +3,7 @@
 
 [1. Y.1731 monitoring with iAgent](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
 
-[2. vpn interface monitoring](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/vpn-monitoring)
+[2. VPN Interface Monitoring Using Openconfig](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/VPN-Monitoring-Using-OpenConfig)
 
 [3. collecting delay using OpenConfig and RPM](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/collecting-delay-using-openconfig)
 
