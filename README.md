@@ -11,7 +11,7 @@
 
 [5. SNMP as Ingest](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/SNMP-as-Ingest)
 
-https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/SNMP-as-Ingest
+
  interface traffic monitoring with OpenConfig
 
  collecting LSP statis with native sensor JTI
