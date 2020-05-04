@@ -7,11 +7,11 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-server_ip = "100.123.0.19:8080"
+server_ip = "ip:8080"
 base_url = "https://" + server_ip + "//api/v1/"
 headers = {"Accept":"application/json", "Content-Type":"application/json"}
-username = "jcluser"
-passwd = "Juniper!1"
+username = "****"
+passwd = "*******"
 devices_file = "devices.yml"
 rules_file = "rules.yml"
 playbooks_file = "playbooks.yml"
@@ -31,7 +31,7 @@ def read_payload(file_to_read):
 def post_to_healthbot(url, yml_file):
     payload = read_payload(yml_file)
     r = requests.post(url, auth=HTTPBasicAuth(username, passwd), headers=headers, verify=False, data=payload)
-    if r.status_code == "200":
+    if r.status_code == 200:
       print("succesfull")
     else:
       print("failed")
@@ -40,7 +40,7 @@ def post_to_healthbot(url, yml_file):
 
 def commit_healthbot():
     r = requests.post(base_url + "/configuration", auth=HTTPBasicAuth(username, passwd), headers=headers, verify=False)
-    if r.status_code == "200":
+    if r.status_code == 200:
       print("commit succesfull")
     else:
       print("failed")
