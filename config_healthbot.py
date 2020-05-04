@@ -65,7 +65,7 @@ r = post_to_healthbot(add_playbooks_url, playbooks_file)
 #### add notifications ####
 add_notifications_url = base_url+ "notifications"
 print("adding notifications")
-r = post_to_healthbot(add_playbooks_url, notifications_file)
+r = post_to_healthbot(add_notifications_url, notifications_file)
 
 #### add device groups ####
 add_device_groups_url = base_url+ "device-groups"
