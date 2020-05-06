@@ -19,3 +19,5 @@
 
 
 
+
+for using iagent, please make sure the related rpc yml files are under /var/local/healthbot/input
