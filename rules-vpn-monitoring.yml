@@ -1,0 +1,132 @@
+---
+topic:
+- description: This topic is for vpn monitoring
+  rule:
+  - description: monitor the PE interface status
+    field:
+    - constant:
+        value: "{{pe-ifl-number}}"
+      description: Routing instance sub interface number
+      field-name: instance-ifl-no
+      type: integer
+    - constant:
+        value: "{{pe-interface-name}}"
+      description: Routing instance physical interface name
+      field-name: instance-interface-name
+      type: string
+    - description: Routing instance interface status
+      field-name: instance-interface-status
+      reference:
+        path: "/device-group[device-group-name={{pe-device-group}}]/device[device-id={{pe-device-name}}]/topic[topic-name='interfaces']/rule[rule-name=get-op-status]/field[sub-interface-index='{{pe-ifl-number}}'
+          and interface-name='{{pe-interface-name}}']/link-state"
+      type: string
+    - constant:
+        value: "{{pe-device-name}}"
+      description: PE router name to monitor
+      field-name: pe-router-name
+      type: string
+    - constant:
+        value: "{{customer-vpn-name}}"
+      description: VRF name
+      field-name: vpn-name
+      type: string
+    network-rule: null
+    - 
+    rule-frequency: 30s
+    rule-name: check-vpn-interface-op-state
+    trigger:
+    - frequency: 30s
+      term:
+      - term-name: is-pe-interface-up
+        then:
+          status:
+            color: green
+            message: PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name
+              on $pe-router-name is UP
+        when:
+          matches-with:
+          - left-operand: "$instance-interface-status"
+            right-operand: UP
+      - term-name: is-pe-interface-down
+        then:
+          status:
+            color: red
+            message: PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name
+              on $pe-router-name is $instance-interface-status
+      trigger-name: vpn-pe-interface-state
+    variable:
+    - name: customer-vpn-name
+      type: string
+    - description: Router group to monitor, regular expression, e.g. 'edge.*'
+      name: pe-device-group
+      type: device-group
+    - description: Router name to monitor, regular expression, e.g. 'edge-router.*'
+      name: pe-device-name
+      type: device
+    - description: PE IFL to monitor, regular expression, e.g. '1-10'
+      name: pe-ifl-number
+      type: int
+    - description: PE interface to monitor, regular expression, e.g. 'ge-.*'
+      name: pe-interface-name
+      type: string
+  - description: monitor the PE interface status
+    field:
+    - constant:
+        value: "{{pe-interface-name}}"
+      description: Routing instance interface name
+      field-name: instance-interface-name
+      type: string
+    - description: Routing instance interface status
+      field-name: instance-interface-status
+      reference:
+        path: "/device-group[device-group-name={{pe-device-group}}]/device[device-id={{pe-device-name}}]/topic[topic-name='snmp.interface']/rule[rule-name=interface_status]/field[element_name='{{pe-interface-name}}']/op_status"
+      type: string
+    - constant:
+        value: "{{pe-device-name}}"
+      description: PE router name to monitor
+      field-name: pe-router-name
+      type: string
+    - constant:
+        value: "{{customer-vpn-name}}"
+      description: VRF name
+      field-name: vpn-name
+      type: string
+    network-rule: null
+    - 
+    rule-frequency: 60s
+    rule-name: check-vpn-interface-op-state-snmp
+    trigger:
+    - frequency: 60s
+      term:
+      - term-name: is-pe-interface-up
+        then:
+          status:
+            color: green
+            message: PE interface $instance-interface-name of VPN:$vpn-name on $pe-router-name
+              is $instance-interface-status  UP
+        when:
+          matches-with:
+          - left-operand: "$instance-interface-status"
+            right-operand: '1'
+      - term-name: is-pe-interface-down
+        then:
+          status:
+            color: red
+            message: PE interface $instance-interface-name of VPN:$vpn-name on $pe-router-name
+              is $instance-interface-status down
+      trigger-name: vpn-pe-interface-state
+    variable:
+    - name: customer-vpn-name
+      type: string
+    - description: Router group to monitor, regular expression, e.g. 'edge.*'
+      name: pe-device-group
+      type: device-group
+    - description: Router name to monitor, regular expression, e.g. 'edge-router.*'
+      name: pe-device-name
+      type: device
+    - description: PE interface to monitor, regular expression, e.g. 'ge-.*'
+      name: pe-interface-name
+      type: string
+  sub-topics: []
+  synopsis: for vpn monitoring
+  topic-name: protocol.vpn
