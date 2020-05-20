@@ -1,0 +1,73 @@
+---
+topic:
+- rule:
+  - description: interface using snmp
+    field:
+    - field-name: admin_status
+      sensor:
+      - path: ifAdminStatus
+        sensor-name: interface
+      type: string
+    - field-name: element_name
+      sensor:
+      - path: ifDescr
+        sensor-name: interface
+        where:
+        - query: ifDescr =~ /{{ifd-name}}/
+      type: string
+    - field-name: op_status
+      sensor:
+      - path: ifOperStatus
+        sensor-name: interface
+      type: string
+    keys:
+    - element_name
+    rule-name: interface_status
+    sensor:
+    - sensor-name: interface
+      snmp:
+        frequency: 60s
+        table: IF-MIB::ifTable
+    trigger:
+    - frequency: 60s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: red
+            message: "$element_name admin down admin_status: $admin_status"
+        when:
+          matches-with:
+          - left-operand: "$admin_status"
+            right-operand: '2'
+      - term-name: Term_2
+        then:
+          status:
+            color: green
+            message: "$element_name  admin up admin_status: $admin_status"
+      trigger-name: interface_admin_status
+    - frequency: 60s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: yellow
+            message: "$element_name operational down op_status: $op_status"
+        when:
+          matches-with:
+          - ignore-case:
+            - 
+            left-operand: "$op_status"
+            right-operand: '2'
+      - term-name: Term_2
+        then:
+          status:
+            color: green
+            message: "$element_name  operational up op_status: $op_status"
+      trigger-name: interface_op_status
+    variable:
+    - name: ifd-name
+      type: string
+      value: "(ge|xe)-.*"
+  sub-topics: []
+  topic-name: snmp.interface
