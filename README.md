@@ -1,11 +1,11 @@
 # NetworkMonitorWithHealthbot
-[0. Automate Healthbot Configuration Using API](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/00-Automate-Healthbot-Configuration-Using-API)
+# [Automate Healthbot Configuration Using API](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/00-Automate-Healthbot-Configuration-Using-API)
 
 To automate the Healthbot configuation deployment, we can utilize Healthbot API. For detailed information please refer [Healthbot API document](https://www.juniper.net/documentation/en_US/healthbot/information-products/pathway-pages/api-ref/healthbot-rca-api-2.1.0.html).
 
 In this example, we add device, device groups, rules, playbooks, notifications ,etc.  
 We can use python or ansible.
-# 1. Using Python   
+## 1. Using Python   
 Using [config_healthbot.py](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.py) to load Healthbot configuration in yaml format and post to Healthbot.
 
 e.g.  
@@ -34,7 +34,7 @@ commit heahlthbot configuration
 commit succesfull
 ```
 
-# 2. Using Ansible
+## 2. Using Ansible
 Using Ansible's uri module to make api calls to Healthbot.
 The playbook and role examples can be found here:  
 [config_healthbot.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.yml)  
