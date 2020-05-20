@@ -1,0 +1,64 @@
+---
+topic:
+- rule:
+  - description: Collects BGP neighbor state periodically and notifies anomaly
+    field:
+    - description: Sensor field to store peer address
+      field-name: peer-address
+      sensor:
+      - path: peer-address
+        sensor-name: BgpNeighbor
+        where:
+        - query: peer-address =~ /{{neighbors}}/
+      type: string
+    - field-name: peer-id
+      sensor:
+      - path: peer-id
+        sensor-name: BgpNeighbor
+      type: string
+    - field-name: peer-state
+      sensor:
+      - path: peer-state
+        sensor-name: BgpNeighbor
+      type: string
+    keys:
+    - peer-address
+    rule-name: check-bgp-neighbor-state-iagent
+    sensor:
+    - iAgent:
+        file: bgp_neighbor_custom.yml
+        frequency: 60s
+        table: bgpNeighborTable
+      sensor-name: BgpNeighbor
+      synopsis: iAgent sensor definition
+    synopsis: BGP neighbor state analyzer
+    trigger:
+    - description: Sets health based on change in BGP neighbor session state
+      frequency: 90s
+      synopsis: BGP session state KPI
+      term:
+      - term-name: is-neighbor-up
+        then:
+          status:
+            color: green
+            message: BGP neighbor($peer-id) session is up
+        when:
+          matches-with:
+          - ignore-case:
+            - 
+            left-operand: "$peer-state"
+            right-operand: Established
+      - term-name: neighbor-down
+        then:
+          status:
+            color: red
+            message: BGP neighbor($peer-id) peer-address $peer-address session is
+              down
+      trigger-name: neighbor-state
+    variable:
+    - description: BGP neighbor addresses to monitor, regular expression, e.g. '172.16.*'
+      name: neighbors
+      type: string
+      value: ".*"
+  sub-topics: []
+  topic-name: bgp.iagent
