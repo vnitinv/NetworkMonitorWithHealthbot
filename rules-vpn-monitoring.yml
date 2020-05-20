@@ -31,7 +31,6 @@ topic:
       field-name: vpn-name
       type: string
     network-rule: null
-    - 
     rule-frequency: 30s
     rule-name: check-vpn-interface-op-state
     trigger:
@@ -92,7 +91,6 @@ topic:
       field-name: vpn-name
       type: string
     network-rule: null
-    - 
     rule-frequency: 60s
     rule-name: check-vpn-interface-op-state-snmp
     trigger:
