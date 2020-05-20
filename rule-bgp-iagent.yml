@@ -1,7 +1,7 @@
 ---
 topic:
 - rule:
-  - description: Collects BGP neighbor state periodically and notifies anomaly
+  - description: Collects BGP neighbor state using netconf
     field:
     - description: Sensor field to store peer address
       field-name: peer-address
@@ -44,8 +44,7 @@ topic:
             message: BGP neighbor($peer-id) session is up
         when:
           matches-with:
-          - ignore-case:
-            - 
+          - ignore-case: null
             left-operand: "$peer-state"
             right-operand: Established
       - term-name: neighbor-down
@@ -60,5 +59,60 @@ topic:
       name: neighbors
       type: string
       value: ".*"
+  - description: network rule for bgp session state using netconf
+    field:
+    - constant:
+        value: "{{device1-group-variable}}"
+      field-name: device1-group
+      type: string
+    - constant:
+        value: "{{device1-name-variable}}"
+      field-name: device1-name
+      type: string
+    - constant:
+        value: "{{device1-peer-variable}}"
+      field-name: device1-peer
+      type: string
+    - field-name: device1-peer-session-state
+      reference:
+        path: "/device-group[device-group-name={{device1-group-variable}}]/device[device-id={{device1-name-variable}}]/topic[topic-name='bgp.iagent']/rule[rule-name=check-bgp-neighbor-state-iagent]/field[peer-id='{{device1-peer-variable}}']/peer-state"
+    network-rule: null
+    rule-frequency: 20s
+    rule-name: check-session-state
+    trigger:
+    - frequency: 10s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: green
+            message: "$device1-name to $device1-peer BGP session UP $device1-peer-session-state"
+        when:
+          matches-with:
+          - ignore-case: null
+            left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      - term-name: Term_2
+        then:
+          status:
+            color: red
+            message: "$device1-name to $device1-peer BGP session DOWN $device1-peer-session-state"
+        when:
+          does-not-match-with:
+          - ignore-case: null
+            left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      trigger-name: session-state
+    variable:
+    - name: device1-group-variable
+      type: device-group
+      value: all
+    - name: device1-name-variable
+      type: device
+      value: vMX1
+    - description: ip address
+      name: device1-peer-variable
+      type: string
   sub-topics: []
   topic-name: bgp.iagent
+
