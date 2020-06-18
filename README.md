@@ -34,7 +34,10 @@ commit heahlthbot configuration
 commit succesfull
 ```
 
-## 2. Using Ansible
+
+
+
+## 2. Using Ansible (not updated anymore)
 Using Ansible's uri module to make api calls to Healthbot.
 The playbook and role examples can be found here:  
 [config_healthbot.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.yml)  
