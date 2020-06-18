@@ -1,0 +1,11 @@
+{
+  "playbook": [
+    {
+      "description": "playbook for snmp cpu",
+      "playbook-name": "snmp-cpu",
+      "rules": [
+        "snmp.cpu/device_cpu"
+      ]
+    }
+  ]
+}

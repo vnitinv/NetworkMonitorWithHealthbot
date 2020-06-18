@@ -1,0 +1,57 @@
+{
+  "device-group": [
+    {
+      "device-group-name": "all",
+      "devices": [
+        "mx80-3",
+        "mx80-4",
+        "mx80-1",
+        "mx80-2"
+      ],
+      "notification": {
+        "enable": null,
+        "major": [
+          "Kafka-HB"
+        ],
+        "minor": [
+          "Kafka-HB"
+        ],
+        "normal": [
+          "Kafka-HB"
+        ]
+      },
+      "playbooks": [
+        "interface-status-snmp",
+        "bgp-peer-state-iagent",
+        "snmp-cpu"
+      ],
+      "variable": [
+        {
+          "instance-id": "interface_snmp",
+          "playbook": "interface-status-snmp",
+          "rule": "snmp.interface/interface_status",
+          "running-state": "running",
+          "variable-value": [
+
+          ]
+        },
+        {
+          "instance-id": "cpu_snmp",
+          "playbook": "snmp-cpu",
+          "rule": "snmp.cpu/device_cpu",
+          "variable-value": [
+
+          ]
+        },
+        {
+          "instance-id": "bgp-iagent",
+          "playbook": "bgp-peer-state-iagent",
+          "rule": "bgp.iagent/check-bgp-neighbor-state-iagent",
+          "variable-value": [
+
+          ]
+        }
+      ]
+    }
+  ]
+}

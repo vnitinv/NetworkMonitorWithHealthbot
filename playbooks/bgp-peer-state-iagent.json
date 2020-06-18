@@ -1,0 +1,11 @@
+{
+  "playbook": [
+    {
+      "description": "playbook for bgp netconf",
+      "playbook-name": "bgp-peer-state-iagent",
+      "rules": [
+        "bgp.iagent/check-bgp-neighbor-state-iagent"
+      ]
+    }
+  ]
+}

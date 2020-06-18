@@ -1,0 +1,11 @@
+{
+  "playbook": [
+    {
+      "description": "vpn bgp using iagent",
+      "playbook-name": "vpn-bgp-iagent",
+      "rules": [
+        "bgp.iagent/check-session-state"
+      ]
+    }
+  ]
+}

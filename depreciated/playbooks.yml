@@ -1,0 +1,22 @@
+---
+playbook:
+- description: playbook for bgp netconf
+  playbook-name: bgp-peer-state-iagent
+  rules:
+  - bgp.iagent/check-bgp-neighbor-state-iagent
+- description: playbook for snmp interface status
+  playbook-name: interface-status-snmp
+  rules:
+  - snmp.interface/interface_status
+- description: playbook for snmp cpu
+  playbook-name: snmp-cpu
+  rules:
+  - snmp.cpu/device_cpu
+- description: playbook for vpn interface monitoring
+  playbook-name: vpn-interface-snmp
+  rules:
+  - protocol.vpn/check-vpn-interface-op-state-snmp
+- description: vpn bgp using iagent
+  playbook-name: vpn-bgp-iagent
+  rules:
+  - bgp.iagent/check-session-state

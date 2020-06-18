@@ -1,0 +1,85 @@
+{
+  "rule": [
+    {
+      "field": [
+        {
+          "field-name": "probe_delay",
+          "sensor": [
+            {
+              "path": "probe_rt_ave_delay",
+              "sensor-name": "probe_delay"
+            }
+          ],
+          "type": "integer"
+        },
+        {
+          "field-name": "source-address",
+          "sensor": [
+            {
+              "path": "source-address",
+              "sensor-name": "probe_delay"
+            }
+          ],
+          "type": "string"
+        }
+      ],
+      "keys": [
+        "source-address"
+      ],
+      "rule-name": "probe_delay",
+      "sensor": [
+        {
+          "iAgent": {
+            "file": "RPMprobe.yml",
+            "frequency": "30s",
+            "table": "RPMprobeTable"
+          },
+          "sensor-name": "probe_delay"
+        }
+      ],
+      "trigger": [
+        {
+          "frequency": "30s",
+          "term": [
+            {
+              "term-name": "Term_1",
+              "then": {
+                "status": {
+                  "color": "red",
+                  "message": "$source-address $test_name delay is $probe_delay  exceeds delay threshold 200000 us.  "
+                }
+              },
+              "when": {
+                "greater-than": [
+                  {
+                    "left-operand": "$probe_delay",
+                    "right-operand": "200000"
+                  }
+                ]
+              }
+            },
+            {
+              "term-name": "Term_2",
+              "then": {
+                "status": {
+                  "color": "green",
+                  "message": "green $source-address $test_name delay $probe_delay is normal .  "
+                }
+              },
+              "when": {
+                "less-than-or-equal-to": [
+                  {
+                    "left-operand": "$probe_delay",
+                    "right-operand": "200000"
+                  }
+                ]
+              }
+            }
+          ],
+          "trigger-name": "interface_high_delay"
+        }
+      ]
+    }
+  ],
+  "topic-name": "probe-delay"
+}

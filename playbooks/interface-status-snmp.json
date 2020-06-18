@@ -1,0 +1,11 @@
+{
+  "playbook": [
+    {
+      "description": "playbook for snmp interface status",
+      "playbook-name": "interface-status-snmp",
+      "rules": [
+        "snmp.interface/interface_status"
+      ]
+    }
+  ]
+}

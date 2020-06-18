@@ -1,81 +1,55 @@
 ---
 network-group:
-- network-group-name: VPN-1
+- network-group-name: L3VPN-1010
+  notification:
+    enable: null
   playbooks:
-  - vpn-bgp-state
-  - vpn-interface
+  - vpn-interface-snmp
+  - vpn-bgp-iagent
   variable:
-  - instance-id: vmx101-104
-    playbook: vpn-bgp-state
-    rule: bgp/check-session-state
-    running-state: running
-    variable-value:
-    - name: device1-group-variable
-      value: northstar
-    - name: device1-name-variable
-      value: vmx101
-    - name: device1-peer-variable
-      value: 11.0.0.104
-  - instance-id: vmx101-102
-    playbook: vpn-bgp-state
-    rule: bgp/check-session-state
-    running-state: running
-    variable-value:
-    - name: device1-group-variable
-      value: northstar
-    - name: device1-name-variable
-      value: vmx101
-    - name: device1-peer-variable
-      value: 11.0.0.102
-  - instance-id: vmx102-104
-    playbook: vpn-bgp-state
-    rule: bgp/check-session-state
-    running-state: running
-    variable-value:
-    - name: device1-group-variable
-      value: northstar
-    - name: device1-name-variable
-      value: vmx102
-    - name: device1-peer-variable
-      value: 11.0.0.104
-  - instance-id: vmx101-108
-    playbook: vpn-bgp-state
-    rule: bgp/check-session-state
-    running-state: running
-    variable-value:
-    - name: device1-group-variable
-      value: northstar
-    - name: device1-name-variable
-      value: vmx101
-    - name: device1-peer-variable
-      value: 11.0.0.108
-  - instance-id: vpn0-vmx101-ge001
-    playbook: vpn-interface
-    rule: protocol.vpn/check-vpn-interface-op-state
-    running-state: running
+  - instance-id: mx80-1-ge1021010
+    playbook: vpn-interface-snmp
+    rule: protocol.vpn/check-vpn-interface-op-state-snmp
     variable-value:
     - name: customer-vpn-name
-      value: vpn_0
+      value: L3VPN-1010
     - name: pe-device-group
-      value: vpn-1
+      value: all
     - name: pe-device-name
-      value: vmx101
-    - name: pe-ifl-number
-      value: '0'
+      value: mx80-1
     - name: pe-interface-name
-      value: ge-0/0/1
-  - instance-id: vpn0-vmx102-ge001
-    playbook: vpn-interface
-    rule: protocol.vpn/check-vpn-interface-op-state
-    running-state: running
+      value: ge-1/0/2.1010
+  - instance-id: mx80-2-ge1021010
+    playbook: vpn-interface-snmp
+    rule: protocol.vpn/check-vpn-interface-op-state-snmp
     variable-value:
     - name: customer-vpn-name
-      value: vpn_0
+      value: L3VPN-1010
     - name: pe-device-group
-      value: vpn-1
+      value: all
     - name: pe-device-name
-      value: vmx102
-    - name: pe-ifl-number
-      value: '0'
+      value: mx80-2
     - name: pe-interface-name
-      value: ge-0/0/1
+      value: ge-1/0/2.1010
+  - instance-id: mx80-1-to-mx80-2
+    playbook: vpn-bgp-iagent
+    rule: bgp.iagent/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: all
+    - name: device1-name-variable
+      value: mx80-1
+    - name: device1-peer-variable
+      value: 10.180.100.2
+  - instance-id: mx80-1-to-mx80-3
+    playbook: vpn-bgp-iagent
+    rule: bgp.iagent/check-session-state
+    running-state: running
+    variable-value:
+    - name: device1-group-variable
+      value: all
+    - name: device1-name-variable
+      value: mx80-1
+    - name: device1-peer-variable
+      value: 10.180.100.3

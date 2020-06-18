@@ -1,0 +1,380 @@
+---
+topic:
+- rule:
+  - description: interface using snmp
+    field:
+    - field-name: admin_status
+      sensor:
+      - path: ifAdminStatus
+        sensor-name: interface
+      type: string
+    - field-name: element_name
+      sensor:
+      - path: ifDescr
+        sensor-name: interface
+        where:
+        - query: ifDescr =~ /{{ifd-name}}/
+      type: string
+    - field-name: op_status
+      sensor:
+      - path: ifOperStatus
+        sensor-name: interface
+      type: string
+    keys:
+    - element_name
+    rule-name: interface_status
+    sensor:
+    - sensor-name: interface
+      snmp:
+        frequency: 60s
+        table: IF-MIB::ifTable
+    trigger:
+    - frequency: 60s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: red
+            message: "$element_name admin down admin_status: $admin_status"
+        when:
+          matches-with:
+          - left-operand: "$admin_status"
+            right-operand: '2'
+      - term-name: Term_2
+        then:
+          status:
+            color: green
+            message: "$element_name  admin up admin_status: $admin_status"
+      trigger-name: interface_admin_status
+    - frequency: 60s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: yellow
+            message: "$element_name operational down op_status: $op_status"
+        when:
+          matches-with:
+          - ignore-case:
+            - 
+            left-operand: "$op_status"
+            right-operand: '2'
+      - term-name: Term_2
+        then:
+          status:
+            color: green
+            message: "$element_name  operational up op_status: $op_status"
+      trigger-name: interface_op_status
+    variable:
+    - name: ifd-name
+      type: string
+      value: "(ge|xe)-.*"
+  sub-topics: []
+  topic-name: snmp.interface
+- rule:
+  - description: Collects BGP neighbor state periodically and notifies anomaly
+    field:
+    - description: Sensor field to store peer address
+      field-name: peer-address
+      sensor:
+      - path: peer-address
+        sensor-name: BgpNeighbor
+        where:
+        - query: peer-address =~ /{{neighbors}}/
+      type: string
+    - field-name: peer-id
+      sensor:
+      - path: peer-id
+        sensor-name: BgpNeighbor
+      type: string
+    - field-name: peer-state
+      sensor:
+      - path: peer-state
+        sensor-name: BgpNeighbor
+      type: string
+    keys:
+    - peer-address
+    rule-name: check-bgp-neighbor-state-iagent
+    sensor:
+    - iAgent:
+        file: bgp_neighbor_custom.yml
+        frequency: 60s
+        table: bgpNeighborTable
+      sensor-name: BgpNeighbor
+      synopsis: iAgent sensor definition
+    synopsis: BGP neighbor state analyzer
+    trigger:
+    - description: Sets health based on change in BGP neighbor session state
+      frequency: 90s
+      synopsis: BGP session state KPI
+      term:
+      - term-name: is-neighbor-up
+        then:
+          status:
+            color: green
+            message: BGP neighbor($peer-id) session is up
+        when:
+          matches-with:
+          - ignore-case:
+            - 
+            left-operand: "$peer-state"
+            right-operand: Established
+      - term-name: neighbor-down
+        then:
+          status:
+            color: red
+            message: BGP neighbor($peer-id) peer-address $peer-address session is
+              down
+      trigger-name: neighbor-state
+    variable:
+    - description: BGP neighbor addresses to monitor, regular expression, e.g. '172.16.*'
+      name: neighbors
+      type: string
+      value: ".*"
+  - description: network rule for bgp session state using netconf
+    field:
+    - constant:
+        value: "{{device1-group-variable}}"
+      field-name: device1-group
+      type: string
+    - constant:
+        value: "{{device1-name-variable}}"
+      field-name: device1-name
+      type: string
+    - constant:
+        value: "{{device1-peer-variable}}"
+      field-name: device1-peer
+      type: string
+    - field-name: device1-peer-session-state
+      reference:
+        path: "/device-group[device-group-name={{device1-group-variable}}]/device[device-id={{device1-name-variable}}]/topic[topic-name='bgp.iagent']/rule[rule-name=check-bgp-neighbor-state-iagent]/field[peer-id='{{device1-peer-variable}}']/peer-state"
+    network-rule: null
+    rule-frequency: 20s
+    rule-name: check-session-state
+    trigger:
+    - frequency: 10s
+      term:
+      - term-name: Term_1
+        then:
+          status:
+            color: green
+            message: "$device1-name to $device1-peer BGP session UP $device1-peer-session-state"
+        when:
+          matches-with:
+          - ignore-case: null
+            left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      - term-name: Term_2
+        then:
+          status:
+            color: red
+            message: "$device1-name to $device1-peer BGP session DOWN $device1-peer-session-state"
+        when:
+          does-not-match-with:
+          - ignore-case: null
+            left-operand: "$device1-peer-session-state"
+            right-operand: ESTABLISHED
+      trigger-name: session-state
+    variable:
+    - name: device1-group-variable
+      type: device-group
+      value: all
+    - name: device1-name-variable
+      type: device
+      value: vMX1
+    - description: ip address
+      name: device1-peer-variable
+      type: string
+  sub-topics: []
+  topic-name: bgp.iagent
+- rule:
+  - field:
+    - description: 'system cpu 1 min average '
+      field-name: cpu-1min-avg
+      sensor:
+      - path: jnxOperating1MinAvgCPU
+        sensor-name: system-cpu
+      type: integer
+    - description: 'collect operating description  for Routing Engine '
+      field-name: element_name
+      sensor:
+      - path: jnxOperatingDescr
+        sensor-name: system-cpu
+        where:
+        - query: jnxOperatingDescr =~ /{{comp-name}}/
+    - description: system cpu util
+      field-name: system-cpu
+      sensor:
+      - path: jnxOperatingCPU
+        sensor-name: system-cpu
+      type: integer
+    - constant:
+        value: "{{static-threshold}}"
+      description: cpu util threshold value
+      field-name: threshold
+      type: integer
+    keys:
+    - element_name
+    rule-name: device_cpu
+    sensor:
+    - sensor-name: system-cpu
+      snmp:
+        frequency: 60s
+        table: JUNIPER-MIB::jnxOperatingTable
+    trigger:
+    - frequency: 90s
+      term:
+      - term-name: system-cpu-util-high
+        then:
+          status:
+            color: red
+            message: cpu util $system-cpu for $element_name is higher than $threshold
+        when:
+          greater-than:
+          - left-operand: "$system-cpu"
+            right-operand: "$threshold"
+      - term-name: system-cpu-util-normal
+        then:
+          status:
+            color: green
+            message: cpu util $system-cpu for $element_name is normal
+      trigger-name: cpu_util_trigger
+    variable:
+    - description: 'collects all routing engine CPU '
+      name: comp-name
+      type: string
+      value: ".*Routing Engine.*"
+    - name: static-threshold
+      type: int
+      value: '98'
+  sub-topics: []
+  topic-name: snmp.cpu
+- description: This is for vpn monitoring
+  rule:
+  - description: monitor the PE interface status
+    field:
+    - constant:
+        value: "{{pe-ifl-number}}"
+      description: Routing instance sub interface number
+      field-name: instance-ifl-no
+      type: integer
+    - constant:
+        value: "{{pe-interface-name}}"
+      description: Routing instance physical interface name
+      field-name: instance-interface-name
+      type: string
+    - description: Routing instance interface status
+      field-name: instance-interface-status
+      reference:
+        path: "/device-group[device-group-name={{pe-device-group}}]/device[device-id={{pe-device-name}}]/topic[topic-name='interfaces']/rule[rule-name=get-op-status]/field[sub-interface-index='{{pe-ifl-number}}'
+          and interface-name='{{pe-interface-name}}']/link-state"
+      type: string
+    - constant:
+        value: "{{pe-device-name}}"
+      description: PE router name to monitor
+      field-name: pe-router-name
+      type: string
+    - constant:
+        value: "{{customer-vpn-name}}"
+      description: VRF name
+      field-name: vpn-name
+      type: string
+    network-rule: null
+    rule-frequency: 30s
+    rule-name: check-vpn-interface-op-state
+    trigger:
+    - frequency: 30s
+      term:
+      - term-name: is-pe-interface-up
+        then:
+          status:
+            color: green
+            message: PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name
+              on $pe-router-name is UP
+        when:
+          matches-with:
+          - left-operand: "$instance-interface-status"
+            right-operand: UP
+      - term-name: is-pe-interface-down
+        then:
+          status:
+            color: red
+            message: PE interface $instance-interface-name.$instance-ifl-no of VPN:$vpn-name
+              on $pe-router-name is $instance-interface-status
+      trigger-name: vpn-pe-interface-state
+    variable:
+    - name: customer-vpn-name
+      type: string
+    - description: Router group to monitor, regular expression, e.g. 'edge.*'
+      name: pe-device-group
+      type: device-group
+    - description: Router name to monitor, regular expression, e.g. 'edge-router.*'
+      name: pe-device-name
+      type: device
+    - description: PE IFL to monitor, regular expression, e.g. '1-10'
+      name: pe-ifl-number
+      type: int
+    - description: PE interface to monitor, regular expression, e.g. 'ge-.*'
+      name: pe-interface-name
+      type: string
+  - description: monitor the PE interface status
+    field:
+    - constant:
+        value: "{{pe-interface-name}}"
+      description: Routing instance interface name
+      field-name: instance-interface-name
+      type: string
+    - description: Routing instance interface status
+      field-name: instance-interface-status
+      reference:
+        path: "/device-group[device-group-name={{pe-device-group}}]/device[device-id={{pe-device-name}}]/topic[topic-name='snmp.interface']/rule[rule-name=interface_status]/field[element_name='{{pe-interface-name}}']/op_status"
+      type: string
+    - constant:
+        value: "{{pe-device-name}}"
+      description: PE router name to monitor
+      field-name: pe-router-name
+      type: string
+    - constant:
+        value: "{{customer-vpn-name}}"
+      description: VRF name
+      field-name: vpn-name
+      type: string
+    network-rule: null
+    rule-frequency: 60s
+    rule-name: check-vpn-interface-op-state-snmp
+    trigger:
+    - frequency: 60s
+      term:
+      - term-name: is-pe-interface-up
+        then:
+          status:
+            color: green
+            message: PE interface $instance-interface-name of VPN:$vpn-name on $pe-router-name
+              is $instance-interface-status  UP
+        when:
+          matches-with:
+          - left-operand: "$instance-interface-status"
+            right-operand: '1'
+      - term-name: is-pe-interface-down
+        then:
+          status:
+            color: red
+            message: PE interface $instance-interface-name of VPN:$vpn-name on $pe-router-name
+              is $instance-interface-status down
+      trigger-name: vpn-pe-interface-state
+    variable:
+    - name: customer-vpn-name
+      type: string
+    - description: Router group to monitor, regular expression, e.g. 'edge.*'
+      name: pe-device-group
+      type: device-group
+    - description: Router name to monitor, regular expression, e.g. 'edge-router.*'
+      name: pe-device-name
+      type: device
+    - description: PE interface to monitor, regular expression, e.g. 'ge-.*'
+      name: pe-interface-name
+      type: string
+  sub-topics: []
+  synopsis: for vpn monitoring
+  topic-name: protocol.vpn
+

@@ -1,0 +1,11 @@
+{
+  "playbook": [
+    {
+      "description": "playbook for vpn interface monitoring",
+      "playbook-name": "vpn-interface-snmp",
+      "rules": [
+        "protocol.vpn/check-vpn-interface-op-state-snmp"
+      ]
+    }
+  ]
+}

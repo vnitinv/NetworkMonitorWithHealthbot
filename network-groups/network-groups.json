@@ -1,0 +1,102 @@
+{
+  "network-group": [
+    {
+      "network-group-name": "L3VPN-1010",
+      "notification": {
+        "enable": null
+      },
+      "playbooks": [
+        "vpn-interface-snmp",
+        "vpn-bgp-iagent"
+      ],
+      "variable": [
+        {
+          "instance-id": "mx80-1-ge1021010",
+          "playbook": "vpn-interface-snmp",
+          "rule": "protocol.vpn/check-vpn-interface-op-state-snmp",
+          "variable-value": [
+            {
+              "name": "customer-vpn-name",
+              "value": "L3VPN-1010"
+            },
+            {
+              "name": "pe-device-group",
+              "value": "all"
+            },
+            {
+              "name": "pe-device-name",
+              "value": "mx80-1"
+            },
+            {
+              "name": "pe-interface-name",
+              "value": "ge-1/0/2.1010"
+            }
+          ]
+        },
+        {
+          "instance-id": "mx80-2-ge1021010",
+          "playbook": "vpn-interface-snmp",
+          "rule": "protocol.vpn/check-vpn-interface-op-state-snmp",
+          "variable-value": [
+            {
+              "name": "customer-vpn-name",
+              "value": "L3VPN-1010"
+            },
+            {
+              "name": "pe-device-group",
+              "value": "all"
+            },
+            {
+              "name": "pe-device-name",
+              "value": "mx80-2"
+            },
+            {
+              "name": "pe-interface-name",
+              "value": "ge-1/0/2.1010"
+            }
+          ]
+        },
+        {
+          "instance-id": "mx80-1-to-mx80-2",
+          "playbook": "vpn-bgp-iagent",
+          "rule": "bgp.iagent/check-session-state",
+          "running-state": "running",
+          "variable-value": [
+            {
+              "name": "device1-group-variable",
+              "value": "all"
+            },
+            {
+              "name": "device1-name-variable",
+              "value": "mx80-1"
+            },
+            {
+              "name": "device1-peer-variable",
+              "value": "10.180.100.2"
+            }
+          ]
+        },
+        {
+          "instance-id": "mx80-1-to-mx80-3",
+          "playbook": "vpn-bgp-iagent",
+          "rule": "bgp.iagent/check-session-state",
+          "running-state": "running",
+          "variable-value": [
+            {
+              "name": "device1-group-variable",
+              "value": "all"
+            },
+            {
+              "name": "device1-name-variable",
+              "value": "mx80-1"
+            },
+            {
+              "name": "device1-peer-variable",
+              "value": "10.180.100.3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,12 +3,12 @@
     {
       "authentication": {
         "password": {
-          "password": "****",
-          "username": "****"
+          "password": "$9$jekmTOBEhyK0BIEcSeK4aJDqm",
+          "username": "lab"
         }
       },
-      "device-id": "vmx102",
-      "host": "10.102.162.134",
+      "device-id": "mx80-3",
+      "host": "10.180.20.60",
       "iAgent": {
         "port": 830
       },
@@ -21,7 +21,7 @@
           "community": "public"
         }
       },
-      "system-id": "vmx102:10.102.162.134",
+      "system-id": "mv80-3:10.180.20.60",
       "vendor": {
         "juniper": {
           "operating-system": "junos"
@@ -31,12 +31,12 @@
     {
       "authentication": {
         "password": {
-          "password": "****",
-          "username": "****"
+          "password": "$9$cwMrK84oGUi.goJGDjq.0B1hlK",
+          "username": "lab"
         }
       },
-      "device-id": "vmx104",
-      "host": "10.102.161.69",
+      "device-id": "mx80-4",
+      "host": "10.180.20.61",
       "iAgent": {
         "port": 830
       },
@@ -49,7 +49,7 @@
           "community": "public"
         }
       },
-      "system-id": "vmx104:10.102.161.69",
+      "system-id": "mv80-4:10.180.20.61",
       "vendor": {
         "juniper": {
           "operating-system": "junos"
@@ -59,25 +59,41 @@
     {
       "authentication": {
         "password": {
-          "password": "****",
-          "username": "****"
+          "password": "$9$V1sgJTQn6Cu5QFn/9pu8XxdYg",
+          "username": "lab"
         }
       },
-      "device-id": "vmx101",
-      "host": "10.102.162.149",
+      "device-id": "mx80-1",
+      "host": "10.180.20.91",
       "iAgent": {
         "port": 830
       },
       "open-config": {
         "port": 32767
       },
-      "snmp": {
-        "port": 161,
-        "v2": {
-          "community": "public"
+      "system-id": "mx80-1:10.180.20.91",
+      "vendor": {
+        "juniper": {
+          "operating-system": "junos"
+        }
+      }
+    },
+    {
+      "authentication": {
+        "password": {
+          "password": "$9$TF6ArlMWX-ylKM8LN-Hq.536",
+          "username": "lab"
         }
       },
-      "system-id": "vmx101:10.102.162.149",
+      "device-id": "mx80-2",
+      "host": "10.180.20.90",
+      "iAgent": {
+        "port": 830
+      },
+      "open-config": {
+        "port": 32767
+      },
+      "system-id": "mx80-2:10.180.20.90",
       "vendor": {
         "juniper": {
           "operating-system": "junos"

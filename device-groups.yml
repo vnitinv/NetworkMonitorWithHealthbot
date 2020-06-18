@@ -1,13 +1,13 @@
 ---
 device-group:
-- device-group-name: vpn-1
+- device-group-name: all
   devices:
-  - vmx102
-  - vmx104
-  - vmx101
+  - mx80-3
+  - mx80-4
+  - mx80-1
+  - mx80-2
   notification:
-    enable:
-    - null
+    enable: null
     major:
     - Kafka-HB
     minor:
@@ -15,19 +15,21 @@ device-group:
     normal:
     - Kafka-HB
   playbooks:
-  - latency
-  - bgp-using-openconfig
-  - all-interface-status
+  - interface-status-snmp
+  - bgp-peer-state-iagent
+  - snmp-cpu
   variable:
-  - instance-id: latency
-    playbook: latency
-    rule: latency/probe_delay_telemetry
-  - instance-id: bgp-openconfig
-    playbook: bgp-using-openconfig
-    rule: bgp/check-bgp-state-using-openconfig
-  - instance-id: interface-op-status
-    playbook: all-interface-status
-    rule: interfaces/get-op-status
-    variable-value:
-    - name: ifd-name
-      value: ge-.*
+  - instance-id: interface_snmp
+    playbook: interface-status-snmp
+    rule: snmp.interface/interface_status
+    running-state: running
+    variable-value: []
+  - instance-id: cpu_snmp
+    playbook: snmp-cpu
+    rule: snmp.cpu/device_cpu
+    variable-value: []
+  - instance-id: bgp-iagent
+    playbook: bgp-peer-state-iagent
+    rule: bgp.iagent/check-bgp-neighbor-state-iagent
+    variable-value: []
+

@@ -3,9 +3,9 @@
     {
       "kafka-publish": {
         "bootstrap-servers": [
-          "192.168.99.100:32001"
+          "10.180.20.17:32001"
         ],
-        "topic": "hb-triggers"
+        "topic": "event"
       },
       "notification-name": "Kafka-HB"
     }

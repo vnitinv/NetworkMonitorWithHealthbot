@@ -1,5 +1,5 @@
 # NetworkMonitorWithHealthbot
-# [Automate Healthbot Configuration Using API](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/00-Automate-Healthbot-Configuration-Using-API)
+Automate Healthbot Configuration Using API
 
 To automate the Healthbot configuation deployment, we can utilize Healthbot API. For detailed information please refer [Healthbot API document](https://www.juniper.net/documentation/en_US/healthbot/information-products/pathway-pages/api-ref/healthbot-rca-api-2.1.0.html).
 
@@ -46,7 +46,7 @@ body content examples are here:
 [device-groups.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/device-groups.json)  
 [network-groups.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/network-groups.json)    
 [notifications.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/notifications.json)  
-[rules.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/rules.json)  
+[rules.json](workMonitorWithHealthbot/blob/master/rules.json)  
 [playbooks.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/playbooks.json)  
 ```
 [jcluser@centos hb_ansible]$ ansible-playbook config_hb1.yml
@@ -83,23 +83,8 @@ localhost                  : ok=8    changed=0    unreachable=0    failed=0    s
 ```
 
 
-[1. Y.1731 monitoring with iAgent](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/Y.1731-monitoring-with-iAgent)
-
-[2. VPN Interface Monitoring Using Openconfig](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/VPN-Monitoring-Using-OpenConfig)
-
-[3. collecting delay using OpenConfig and RPM](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/collecting-delay-using-openconfig)
-
-[4. Syslog as Ingest](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/syslog-as-ingest)
-
-[5. SNMP as Ingest](https://github.com/wouyang628/NetworkMonitorWithHealthbot/wiki/SNMP-as-Ingest)
-
-
- interface traffic monitoring with OpenConfig
-
- collecting LSP statis with native sensor JTI
 
 
 
 
 
-for using iagent, please make sure the related rpc yml files are under /var/local/healthbot/input
