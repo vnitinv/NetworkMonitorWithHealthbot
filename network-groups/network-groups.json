@@ -3,7 +3,7 @@
     {
       "network-group-name": "L3VPN-1010",
       "notification": {
-        "enable": null
+        "enable": []
       },
       "playbooks": [
         "vpn-interface-snmp",

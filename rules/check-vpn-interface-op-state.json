@@ -37,7 +37,7 @@
           "type": "string"
         }
       ],
-      "network-rule": [],
+      "network-rule": [null],
       "rule-frequency": "60s",
       "rule-name": "check-vpn-interface-op-state-snmp",
       "trigger": [

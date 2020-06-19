@@ -73,7 +73,7 @@
               "when": {
                 "matches-with": [
                   {
-                    "ignore-case": [],
+                    "ignore-case": [null],
                     "left-operand": "$peer-state",
                     "right-operand": "Established"
                   }
@@ -133,7 +133,7 @@
           }
         }
       ],
-      "network-rule": [],
+      "network-rule": [null],
       "rule-frequency": "20s",
       "rule-name": "check-session-state",
       "trigger": [
@@ -151,7 +151,7 @@
               "when": {
                 "matches-with": [
                   {
-                    "ignore-case": [],
+                    "ignore-case": [null],
                     "left-operand": "$device1-peer-session-state",
                     "right-operand": "ESTABLISHED"
                   }
@@ -169,7 +169,7 @@
               "when": {
                 "does-not-match-with": [
                   {
-                    "ignore-case": [],
+                    "ignore-case": [null],
                     "left-operand": "$device1-peer-session-state",
                     "right-operand": "ESTABLISHED"
                   }

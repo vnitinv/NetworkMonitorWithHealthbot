@@ -5,16 +5,19 @@ To automate the Healthbot configuation deployment, we can utilize Healthbot API.
 
 In this example, we add device, device groups, rules, playbooks, notifications ,etc.  
 We can use python or ansible.
+
 ## 1. Using Python   
-Using [config_healthbot.py](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.py) to load Healthbot configuration in yaml format and post to Healthbot.
+Using [config_healthbot.py](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.py) to load Healthbot configuration and post to Healthbot.
+
+Please change the settings in settings.json according to your enviroment.
 
 e.g.  
-[devices.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/devices.yml)  
-[device-groups.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/device-groups.yml)  
-[network-groups.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/network-groups.yml)  
-[notifications.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/notifications.yml)  
-[rules.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/rules.yml)  
-[playbooks.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/playbooks.yml)  
+[devices.yml](devices.yml)  
+[device-groups.yml](device-groups.yml)  
+[network-groups.yml](network-groups.yml)  
+[notifications.yml](notifications.yml)  
+[rules.yml](rules.yml)  
+[playbooks.yml](playbooks.yml)  
 
 ```
 jcluser@ubuntu:~$ python3 config_healthbot.py
@@ -34,23 +37,23 @@ commit heahlthbot configuration
 commit succesfull
 ```
 
-
-
-
-## 2. Using Ansible (not updated anymore)
+## 2. Using Ansible
 Using Ansible's uri module to make api calls to Healthbot.
 The playbook and role examples can be found here:  
-[config_healthbot.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/config_healthbot.yml)  
-[roles/config_healthbot/tasks/main.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/roles/config_healthbot/tasks/main.yml)  
-[roles/config_healthbot/defaults/main.yml](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/roles/config_healthbot/defaults/main.yml)  
+[config_healthbot.yml](config_healthbot.yml)  
+[roles/config_healthbot/tasks/main.yml](roles/config_healthbot/tasks/main.yml)  
+[roles/config_healthbot/defaults/main.yml](roles/config_healthbot/defaults/main.yml)  
 
 body content examples are here:  
-[devices.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/devices.json)  
-[device-groups.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/device-groups.json)  
-[network-groups.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/network-groups.json)    
-[notifications.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/notifications.json)  
-[rules.json](workMonitorWithHealthbot/blob/master/rules.json)  
-[playbooks.json](https://github.com/wouyang628/NetworkMonitorWithHealthbot/blob/master/playbooks.json)  
+[devices.json](devices.json)  
+[device-groups.json](device-groups.json)  
+[network-groups.json](network-groups.json)    
+[notifications.json](notifications.json)  
+[rules.json](rules.json)  
+[playbooks.json](playbooks.json)  
+
+Please update the server ip and user credential in  
+[roles/config_healthbot/defaults/main.yml](roles/config_healthbot/defaults/main.yml)
 ```
 [jcluser@centos hb_ansible]$ ansible-playbook config_hb1.yml
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'

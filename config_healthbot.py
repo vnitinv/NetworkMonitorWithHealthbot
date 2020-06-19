@@ -8,18 +8,20 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class Healthbot(object):
     def __init__(self):
-        self.server_ip = "66.129.235.12:49022"
+        with open("settings.json") as f:
+            settings = json.load(f)
+        self.server_ip = settings["server_ip"]
+        self.username = settings["username"]
+        self.passwd = settings["passwd"]
+        self.devices_file = settings["devices_file"]
+        self.rule_directory = settings["rule_directory"]
+        self.playbook_directory = settings["playbook_directory"]
+        self.helper_file_directory = settings["helper_file_directory"]
+        self.notifications_file = settings["notifications_file"]
+        self.device_groups_file = settings["device_groups_file"]
+        self.network_groups_file = settings["network_groups_file"]
         self.base_url = "https://" + self.server_ip + "/api/v1/"
         self.headers = {"Accept":"application/json", "Content-Type":"application/json"}
-        self.username = "jcluser"
-        self.passwd = "Juniper!1"
-        self.devices_file = "devices.yml"
-        self.rule_directory = "rules/"
-        self.playbook_directory = "playbooks/"
-        self.helper_file_directory = "helper-files/"
-        self.notifications_file = "notifications.yml"
-        self.device_groups_file = "device-groups.yml"
-        self.network_groups_file = "network-groups.yml"
 
     #load the yaml file and convert to json payload
     def read_payload(self, file_to_read):
@@ -39,20 +41,12 @@ class Healthbot(object):
           print(r.content)
         return(r)
 
-    def commit_healthbot(self):
-        r = requests.post(self.base_url + "/configuration", auth=HTTPBasicAuth(self.username, self.passwd), headers=self.headers, verify=False)
-        if r.status_code == 200:
-          print("commit succesfull")
-        else:
-          print("failed")
-          print(r.content)
-        return(r)
-
     def add_a_rule(self, topic_name, payload):
         add_a_rule_url = self.base_url + "topic/" + topic_name
         r = self.post_to_healthbot(add_a_rule_url, payload)
         return(r)
 
+    #### add rules ####
     def add_rules(self):
         for filename in os.listdir(self.rule_directory):
             #print("filename: " + filename)
@@ -69,6 +63,7 @@ class Healthbot(object):
         r = self.post_to_healthbot(add_a_playbook_url, payload)
         return(r)
 
+    #### add playbooks ####
     def add_playbooks(self):
         for filename in os.listdir(self.playbook_directory):
             #print("filename: " + filename)
@@ -90,6 +85,7 @@ class Healthbot(object):
             print(r.content)
         return(r)
 
+    #### add helper files ####
     def upload_helper_files(self):
          for filename in os.listdir(self.helper_file_directory):
             #print("filename: " + filename)
@@ -98,12 +94,59 @@ class Healthbot(object):
             print("adding helper file: " + filename)
             r = self.upload_a_helper_file(filename, payload_helper)        
 
+    #### add devices ####
+    def add_devices(self):
+        add_devices_url = self.base_url+ "devices"
+        print("adding devices")
+        payload = self.read_payload(self.devices_file)
+        r = self.post_to_healthbot(add_devices_url, payload) 
+        return(r)       
+
+    #### add notifications ####
+    def add_notifications(self):
+        add_notifications_url = self.base_url+ "notifications"
+        print("adding notifications")
+        payload = self.read_payload(self.notifications_file)
+        r = self.post_to_healthbot(add_notifications_url, payload)
+        return(r)
+
+    #### add device groups ####
+    def add_device_groups(self):
+        add_device_groups_url = self.base_url+ "device-groups"
+        print("adding device groups")
+        payload = self.read_payload(self.device_groups_file)
+        r = self.post_to_healthbot(add_device_groups_url, payload)
+        return(r)
+
+    #### add netowrk groups ####
+    def add_network_groups(self):
+        add_network_groups_url = self.base_url+ "network-groups"
+        print("adding network groups")
+        payload = self.read_payload(self.network_groups_file)
+        r = self.post_to_healthbot(add_network_groups_url, payload)
+        return(r)    
+
+    #### commit healthbot ####
+    def commit_healthbot(self):
+        r = requests.post(self.base_url + "/configuration", auth=HTTPBasicAuth(self.username, self.passwd), headers=self.headers, verify=False)
+        if r.status_code == 200:
+          print("commit succesfull")
+        else:
+          print("failed")
+          print(r.content)
+        return(r)
+
 if __name__ == '__main__':
     hb= Healthbot()
-    #hb.add_rules()
-    #hb.add_playbooks()
+    hb.add_rules()
+    hb.add_playbooks()
     hb.upload_helper_files()
-    #hb.commit_healthbot()
+    hb.add_devices()
+    hb.add_notifications()
+    hb.add_device_groups()
+    hb.add_network_groups()
+    hb.commit_healthbot()
+
 '''
 #### add devices ####
 add_devices_url = base_url+ "devices"

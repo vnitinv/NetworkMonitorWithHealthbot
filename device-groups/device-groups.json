@@ -9,7 +9,7 @@
         "mx80-2"
       ],
       "notification": {
-        "enable": null,
+        "enable": [],
         "major": [
           "Kafka-HB"
         ],

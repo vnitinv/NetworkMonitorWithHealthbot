@@ -1,0 +1,12 @@
+{
+    "server_ip": "66.129.235.12:49022",
+    "username": "jcluser",
+    "passwd": "Juniper!1",
+    "devices_file": "devices/devices.json",
+    "rule_directory": "rules/",
+    "playbook_directory": "playbooks/",
+    "helper_file_directory": "helper-files/",
+    "notifications_file": "notifications/notifications.json",
+    "device_groups_file": "device-groups/device-groups.json",
+    "network_groups_file": "network-groups/network-groups.json"
+}
