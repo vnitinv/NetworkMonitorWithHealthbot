@@ -7,7 +7,7 @@ import argparse
 import atexit
 import getpass
 import ssl
-#from junossecure.junos_secure import junos_decode
+from junossecure.junos_secure import junos_decode
 
 def GetVMs(content):
 
@@ -20,22 +20,27 @@ def GetVMs(content):
 
 
 def run():
-   '''
+
    host = __pillar__["proxy"]["vcenter"]
    user= __pillar__["proxy"]["username"]
    pwd = junos_decode(__pillar__["proxy"]["encoded_password"])
    port = __pillar__["proxy"]["port"]
-   '''
+
    context = None
    if hasattr(ssl, '_create_unverified_context'):
       context = ssl._create_unverified_context()
-   si = __salt__["vsphere.get_service_instance_via_proxy"]()
+   #si = __salt__["vsphere.get_service_instance_via_proxy"]()
+   si = SmartConnect(host=host,
+                     user=user,
+                     pwd=pwd,
+                     port=port,
+                     sslContext=context)
    if not si:
        print("Could not connect to the specified host using specified "
              "username and password")
        return -1
 
-   #atexit.register(Disconnect, si)
+   atexit.register(Disconnect, si)
 
    content = si.RetrieveContent()
    vms = GetVMs(content)
