@@ -58,12 +58,11 @@ def run():
          #print("########vm config name######")
          #print(vm.config)
          for device in vm.config.hardware.device:
-           #if (device.key >= 4000) and (device.key < 5000):
-             #print("########device######")
-             #print(type(device))
-             #print(device)
-             if hasattr(device, 'macAddress'):
-               mac = device.macAddress
-               #print("MAC        : ", mac)
+           #print("########device######")
+           #print(type(device))
+           #print(device)
+           if hasattr(device, 'macAddress'):
+             mac = device.macAddress
+             #print("MAC        : ", mac)
        vm_list.append({'tags': {"name": name}, "fields": {"ip": ip, "mac": mac}})
    return vm_list
