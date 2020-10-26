@@ -65,5 +65,5 @@ def run():
         vm_list.append({'tags': {"name": name}, "fields": {"ip": ip, "mac": mac}})
     #for vm in vm_list:
     #    print(vm)
-    return(vm_list)
+    return vm_list
 
