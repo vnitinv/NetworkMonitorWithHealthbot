@@ -1,4 +1,3 @@
-#the netmiko can be replaced with Juniper PyEZ for juniper device
 
 from netmiko import ConnectHandler
 from junossecure.junos_secure import junos_decode
