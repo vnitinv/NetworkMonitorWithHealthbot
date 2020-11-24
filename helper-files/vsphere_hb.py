@@ -1,63 +1,77 @@
 #specify vsphere IP (not esxi)
-
 from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim
-
 import atexit
 import ssl
 from junossecure.junos_secure import junos_decode
 
-def GetDatacenterVM(content):
-    datacenter_view = content.viewManager.CreateContainerView(content.rootFolder, 
-                                                                     [vim.Datacenter], 
-                                                                     True)
-    datacenters = datacenter_view.view
+def getVMinfoFromVimVM(item):
+    vm = {}
+    name = item.name
+    print("vm name", item.name)
+    ip = "None"
+    mac = "None"
+    if item.summary.guest != None:
+        ip = item.summary.guest.ipAddress
+        print("ip", ip)
+    if item.config != None:
+        #print("########vm config name######")
+        #print(vm.config)
+        #print("########end of vm config######")
+        for device in item.config.hardware.device:
+            #print("########device######")
+            #print(type(device))
+            #print(device)
+            #print("########end of device######")
+            if hasattr(device, 'macAddress'):
+                mac = device.macAddress
+                print("mac", mac)
+    vm["name"] = name
+    vm["ip"] = ip
+    vm["mac"] = mac
+    return vm
 
+def getListOfVMFromVimFolder(item):
     vm_list = []
+    if hasattr(item, 'childEntity'):
+        hosts = item.childEntity
+        #print("hosts", hosts)
+        for host in hosts:
+            #print("host ", host)
+            hosts2 = host.host
+            print("host.host", host.host)
+            for host2 in hosts2:
+                host_name = host2.name
+                #print("host2",host2, host2.name)
+                print("vm", host2.vm)
+                vm2 = host2.vm
+                for vm in vm2:
+                    vm = getVMinfoFromVimVM(vm)
+                    vm["cluster"] = "none"
+                    vm["host"] = host_name
+                    vm_list.append(vm)
+    return vm_list  
 
-    for datacenter in datacenters:
-        print("datacenter", datacenter)
-        if hasattr(datacenter.hostFolder, 'childEntity'):
-            clusters = datacenter.hostFolder.childEntity
-            print(datacenter.hostFolder.childEntity)
-            for cluster in clusters:
-                print("cluster", cluster.name)
-                #print("group name", group.name)
-                if hasattr(cluster, 'childEntity'):
-                    hosts = cluster.childEntity
-                    #print("hosts", hosts)
-                    for host in hosts:
-                        #print("host ", host)
-                        hosts2 = host.host
-                        #print("host.host", host.host)
-                        for host2 in hosts2:
-                            print("host2",host2, host2.name)
-                            #print("vm", host2.vm)
-                            vm2 = host2.vm
-                            for vm in vm2:
-                                print("vm name", vm.name)
-                                ip = "None"
-                                mac = "None"
-                                if vm.summary.guest != None:
-                                    ip = vm.summary.guest.ipAddress
-                                    #print("ip", ip)
-                                if vm.config != None:
-                                    #print("########vm config name######")
-                                    #print(vm.config)
-                                    #print("########end of vm config######")
-                                    for device in vm.config.hardware.device:
-                                        #print("########device######")
-                                        #print(type(device))
-                                        #print(device)
-                                        #print("########end of device######")
-                                        if hasattr(device, 'macAddress'):
-                                            mac = device.macAddress
-                                            #print("mac", mac)                
-                                vm_list.append({'tags': {"name": vm.name}, "fields": {"ip": ip, "mac": mac, "host":host2.name, "cluster":cluster.name, "datacenter":datacenter.name}})
-        
-    #for vm in vm_list:
-    #  print(vm)
-    return vm_list
+def getListOfVMFromVimCluster(item):
+    vm_list = []
+    print("cluster type")
+    print("cluster", item)
+    print("cluster name", item.name)
+    cluster_name = item.name
+    #if hasattr(cluster, 'childEntity'):
+    hosts = item.host
+    print("hosts", hosts)
+    for host in hosts:
+        host_name = host.name
+        print("host ", host.name)
+        #hosts2 = host.host
+        vms = host.vm
+        for vm in vms:
+            vm = getVMinfoFromVimVM(vm)
+            vm["cluster"] = cluster_name
+            vm["host"] = host_name
+            vm_list.append(vm)
+    return vm_list  
 
 
 def run():
@@ -84,8 +98,35 @@ def run():
         return -1
 
     atexit.register(Disconnect, si)
-
     content = si.RetrieveContent()
-    
-    vm_host_cluster_datacenter = GetDatacenterVM(content)
-    return vm_host_cluster_datacenter
+    datacenter_view = content.viewManager.CreateContainerView(content.rootFolder, 
+                                                                     [vim.Datacenter], 
+                                                                     True)
+    datacenters = datacenter_view.view
+
+    vm_list = []
+
+    for datacenter in datacenters:
+        print("datacenter", datacenter)
+        if hasattr(datacenter.hostFolder, 'childEntity'):
+            items = datacenter.hostFolder.childEntity
+            datacenter_name = datacenter.name
+            #print(datacenter.hostFolder.childEntity)
+            for item in items:   
+                if isinstance(item, vim.Folder):
+                    vm_list_from_vim_folder = getListOfVMFromVimFolder(item)
+                    print("############## folder", item.name)
+                    for vm in vm_list_from_vim_folder:
+                        vm["datacenter"] = datacenter_name
+                    vm_list = vm_list + vm_list_from_vim_folder
+                    #vm_list.append({'tags': {"name": vm_info["name"]}, "fields": {"ip": vm_info["ip"], "mac": vm_info["mac"], "host":vm_info["host"], "cluster":vm_info["cluster"], "datacenter":datacenter.name}})
+                if isinstance(item, vim.ClusterComputeResource):
+                    vm_list_from_cluster = getListOfVMFromVimCluster(item)
+                    print("############## cluster", item.name)
+                    for vm in vm_list_from_cluster:
+                        vm["datacenter"] = datacenter_name
+                    vm_list = vm_list + vm_list_from_cluster
+
+    #for vm in vm_list: print(vm)
+    return vm_list
+
