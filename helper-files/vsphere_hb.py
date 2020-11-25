@@ -1,4 +1,4 @@
-#specify vsphere IP (not esxi)
+#specify vsphere IP 
 from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim
 import atexit
@@ -6,7 +6,8 @@ import ssl
 from junossecure.junos_secure import junos_decode
 
 def getVMinfoFromVimVM(item):
-    vm = {}
+    vm = {"tags":{}, 
+          "fields": {}}
     name = item.name
     print("vm name", item.name)
     ip = "None"
@@ -26,9 +27,9 @@ def getVMinfoFromVimVM(item):
             if hasattr(device, 'macAddress'):
                 mac = device.macAddress
                 print("mac", mac)
-    vm["name"] = name
-    vm["ip"] = ip
-    vm["mac"] = mac
+    vm["tags"]["name"] = name
+    vm["fields"]["ip"] = ip
+    vm["fields"]["mac"] = mac
     return vm
 
 def getListOfVMFromVimFolder(item):
@@ -47,8 +48,8 @@ def getListOfVMFromVimFolder(item):
                 vm2 = host2.vm
                 for vm in vm2:
                     vm = getVMinfoFromVimVM(vm)
-                    vm["cluster"] = "none"
-                    vm["host"] = host_name
+                    #vm["fields"]["cluster"] = "none"
+                    vm["fields"]["host"] = host_name
                     vm_list.append(vm)
     return vm_list  
 
@@ -68,8 +69,8 @@ def getListOfVMFromVimCluster(item):
         vms = host.vm
         for vm in vms:
             vm = getVMinfoFromVimVM(vm)
-            vm["cluster"] = cluster_name
-            vm["host"] = host_name
+            vm["fields"]["cluster"] = cluster_name
+            vm["fields"]["host"] = host_name
             vm_list.append(vm)
     return vm_list  
 
@@ -115,16 +116,15 @@ def run():
             for item in items:   
                 if isinstance(item, vim.Folder):
                     vm_list_from_vim_folder = getListOfVMFromVimFolder(item)
-                    print("############## folder", item.name)
+                    #print("############## folder", item.name)
                     for vm in vm_list_from_vim_folder:
-                        vm["datacenter"] = datacenter_name
+                        vm["fields"]["datacenter"] = datacenter_name
                     vm_list = vm_list + vm_list_from_vim_folder
-                    #vm_list.append({'tags': {"name": vm_info["name"]}, "fields": {"ip": vm_info["ip"], "mac": vm_info["mac"], "host":vm_info["host"], "cluster":vm_info["cluster"], "datacenter":datacenter.name}})
                 if isinstance(item, vim.ClusterComputeResource):
                     vm_list_from_cluster = getListOfVMFromVimCluster(item)
-                    print("############## cluster", item.name)
+                    #print("############## cluster", item.name)
                     for vm in vm_list_from_cluster:
-                        vm["datacenter"] = datacenter_name
+                        vm["fields"]["datacenter"] = datacenter_name
                     vm_list = vm_list + vm_list_from_cluster
 
     #for vm in vm_list: print(vm)
