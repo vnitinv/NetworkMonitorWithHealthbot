@@ -5,6 +5,7 @@ import atexit
 import ssl
 from junossecure.junos_secure import junos_decode
 
+#
 def getVMinfoFromVimVM(item):
     vm = {"tags":{}, 
           "fields": {}}
@@ -38,19 +39,24 @@ def getListOfVMFromVimFolder(item):
         hosts = item.childEntity
         #print("hosts", hosts)
         for host in hosts:
-            #print("host ", host)
-            hosts2 = host.host
-            print("host.host", host.host)
-            for host2 in hosts2:
-                host_name = host2.name
-                #print("host2",host2, host2.name)
-                print("vm", host2.vm)
-                vm2 = host2.vm
-                for vm in vm2:
-                    vm = getVMinfoFromVimVM(vm)
-                    #vm["fields"]["cluster"] = "none"
-                    vm["fields"]["host"] = host_name
-                    vm_list.append(vm)
+            print("host ", host)
+            print("host name", host.name)
+            if isinstance(host, vim.ClusterComputeResource):
+                vm_list_from_cluster = getListOfVMFromVimCluster(host)
+                vm_list = vm_list + vm_list_from_cluster
+            elif isinstance(host, vim.ComputeResource):
+                hosts2 = host.host
+                print("host2.host", host.host)
+                for host2 in hosts2:
+                    host_name = host2.name
+                    #print("host2",host2, host2.name)
+                    print("vm", host2.vm)
+                    vm2 = host2.vm
+                    for vm in vm2:
+                        vm = getVMinfoFromVimVM(vm)
+                        #vm["fields"]["cluster"] = "none"
+                        vm["fields"]["host"] = host_name
+                        vm_list.append(vm)
     return vm_list  
 
 def getListOfVMFromVimCluster(item):
